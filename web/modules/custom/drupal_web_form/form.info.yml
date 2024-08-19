@@ -1,0 +1,7 @@
+name: 'drupal_web_form'
+type: module
+description: 'module for creation webform'
+core_version_requirement: ^10 || ^11
+package: Custom
+dependencies:
+  - drupal:form

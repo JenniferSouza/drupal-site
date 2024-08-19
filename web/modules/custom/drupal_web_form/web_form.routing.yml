@@ -1,0 +1,7 @@
+drupal_web_form.form:
+  path: '/drupal_web_form'
+  defaults:
+    _form: 'Drupal\drupal_web_form\Form\Webform'
+    _title: 'Webform'
+  requirements:
+    _permission: 'access content'

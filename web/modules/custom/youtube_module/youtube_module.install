@@ -1,0 +1,39 @@
+<?php
+
+/**
+ * Implementa hook_install().
+ */
+function youtube_video_install() {
+  // Adiciona um campo para URLs do YouTube.
+  $content_type = 'article';
+  if (\Drupal\node\Entity\NodeType::load($content_type)) {
+    $field_definition = [
+      'field_type' => 'text',
+      'settings' => [
+        'max_length' => 255,
+      ],
+      'label' => 'YouTube Video URL',
+      'required' => TRUE,
+    ];
+
+/**
+ * Implementa hook_node_view().
+ */
+function youtube_video_node_view(&$build, \Drupal\node\Entity\Node $node, $view_mode, $langcode) {
+  if ($node->hasField('field_youtube_url') && !$node->get('field_youtube_url')->isEmpty()) {
+    $url = $node->get('field_youtube_url')->value;
+    
+    // Extrai o ID do vídeo do YouTube da URL.
+    if (preg_match('/youtube\.com\/watch\?v=([a-zA-Z0-9_-]+)/', $url, $matches) || preg_match('/youtu\.be\/([a-zA-Z0-9_-]+)/', $url, $matches)) {
+      $video_id = $matches[1];
+      $embed_url = 'https://www.youtube.com/embed/' . $video_id;
+
+      $build['youtube_video'] = [
+        '#type' => 'markup',
+        '#markup' => '<div class="youtube-video-wrapper">
+                        <iframe width="560" height="315" src="' . $embed_url . '" frameborder="0" allowfullscreen></iframe>
+                      </div>',
+        ],
+    }
+  }
+}
